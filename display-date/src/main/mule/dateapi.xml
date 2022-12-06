@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <http:listener-config name="dateapi-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="dateapi-config" api="dateapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="698dbf3f-6f73-4e41-8a5e-2532e024c771" >
+		<http:request-connection host="localhost" port="8088" />
+	</http:request-config>
+	<flow name="getDayOfWeek" doc:id="60cb09cb-f579-42c0-aa49-874b2586785e" >
+		<http:listener doc:name="Listener" doc:id="cf81518c-f8e5-4719-bed5-160c638c8aa3" config-ref="dateapi-httpListenerConfig" path="/displayDate/{id}"/>
+		<http:request method="GET" doc:name="Request" doc:id="c7edc1ac-7e69-4005-876c-572b2838551a" config-ref="HTTP_Request_configuration" url="/dayOfWeek/{id}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	id : 1
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"id" : "1"
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+	<flow name="getMonthOfYear" doc:id="e2b1842c-c73d-44af-91da-8c2260f3e446" >
+		<http:listener doc:name="Listener" doc:id="ce20d2a9-a692-42a8-a5f9-49371781de2c" config-ref="dateapi-httpListenerConfig" path="/displayDate/{id}" />
+		<http:request method="GET" doc:name="Request" doc:id="6312ae5c-99ae-4b61-916b-16183222bd94" config-ref="HTTP_Request_configuration" url="/monthOfYear/{id}" >
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	id : 1
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"id" : "1"
+}]]]></http:query-params>
+		</http:request>
+	</flow>
+</mule>
